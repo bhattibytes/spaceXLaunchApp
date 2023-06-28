@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import LaunchItem from './LaunchItem.jsx';
+import styles from '../styles/Home.module.css';
 
 const LAUNCHES_QUERY = gql`
   query LaunchesQuery {
@@ -22,7 +23,8 @@ class Launches extends Component {
     constructor () {
         super();
         this.state = {
-            launchClicked: false
+            launchClicked: false,
+            rocketAnimation: true
         };
         this.handleLaunchClick = this.handleLaunchClick.bind(this);
     }
@@ -34,9 +36,13 @@ class Launches extends Component {
     }  
 
     render () {
+        setTimeout(() => {
+            this.setState({
+                rocketAnimation: false
+            })
+        }, 5000)
         return (
           <Fragment>
-            <h1 className="display-4 my-3" style={{border: "solid white 1px", borderRadius: "15px", padding: "5px 15px 5px 15px", boxShadow: "3px 2px 2px white"}}onClick={this.handleLaunchClick}>Click To See Launches</h1>
             <Query query={LAUNCHES_QUERY}>
                 {
                     ({ loading, error, data }) => {
@@ -47,17 +53,24 @@ class Launches extends Component {
                             console.log(error)
                         }
                         if (this.state.launchClicked) {
-                            return <Fragment>
-                            {
-                                data.launches.map(launch => {
-                                    return <LaunchItem key={launch.id} launch={launch} rocket={launch.rocket}/>
-                                })
-                            }
-                        </Fragment>
-                        } else {
-                            return null
+                            return (
+                                <Fragment>
+                                    {
+                                        data.launches.map(launch => {
+                                            return <LaunchItem key={launch.id} launch={launch} rocket={launch.rocket}/>
+                                        })
+                                    }
+                                </Fragment>
+                            )    
                         } 
-                    }
+                        if (this.state.rocketAnimation) {
+                            return (
+                                <span className={styles.rocketSuccess + ' ' + styles.animateRocketSuccess}>🚀</span>
+                                )
+                        } else {
+                            return <h1 className="display-4 my-3" style={{border: "solid white 1px", borderRadius: "15px", padding: "5px 15px 5px 15px", boxShadow: "3px 2px 2px white", cursor: "pointer"}} onClick={this.handleLaunchClick}>Click To See Launches</h1>
+                            } 
+                        }
                 }
             </Query>
           </Fragment>

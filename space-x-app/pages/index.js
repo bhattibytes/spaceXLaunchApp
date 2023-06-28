@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.css';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import Launches from '../components/Launches';
+import Footer from '../components/footer';
 
 const client = new ApolloClient({
   uri: '/api/graphql'
@@ -26,18 +27,7 @@ export default function Home() {
         </h1>
         <Launches />
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className={styles.logo}>
-            <Image src="https://sdtimes.com/wp-content/uploads/2020/04/1_oBm_3saYz4AI_MS6OekdFQ.png" alt="Vercel Logo" width={200} height={75}/>
-          </span>
-        </a>
-      </footer>
+      <Footer />
     </div>
     </ApolloProvider>
   )
